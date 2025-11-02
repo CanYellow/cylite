@@ -1,22 +1,19 @@
-<!-- MathJax 3 Configuration -->
 <script>
-  window.MathJax = {
-    tex: {
-      // 定义行内公式的分隔符
-      inlineMath: [['$', '$'], ['\\(', '\\)']],
-      // 定义块级公式的分隔符
-      displayMath: [['$$', '$$'], ['\\[', '\\]']],
-      // 允许在公式中使用 \begin{...} \end{...} 环境
-      processEscapes: true,
-      processEnvironments: true
-    },
-    options: {
-      // 忽略 class 为 'nolink' 的元素，避免对某些代码片段进行渲染
-      ignoreHtmlClass: '.*|',
-      processHtmlClass: '.*'
-    }
-  };
+window.MathJax = {
+  // 这是 TeX 输入处理器的配置
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    // ***** 核心配置在这里 *****
+    // 告诉 MathJax 不要处理 <script>, <style>, <pre>, <code> 等标签中的内容
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] 
+  },
+  // 这是 SVG 输出处理器的配置 (可选)
+  svg: {
+    fontCache: 'global'
+  }
+};
 </script>
 
-<!-- Load MathJax 3 -->
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<!-- 在配置之后加载 MathJax -->
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
