@@ -31,6 +31,10 @@
     <!-- 1. 页面标题 -->
     <title>{{ $title }}</title>
 
+    <link rel="icon" type="image/png" href="/logo128x128.png" sizes="128x128" />
+    <link rel="icon" type="image/png" href="/logo256x256.png" sizes="256x256" />
+    <link rel="icon" type="image/png" href="/logo512x512.png" sizes="512x512" />
+
     <!-- 2. 标准 Meta 标签 -->
     <meta name="description" content="{{ $description }}">
     <meta name="author" content="{{ $site.Params.author | default "Author" }}">
@@ -114,8 +118,8 @@
     <script src="{{ "js/copy-code.js" | relURL }}" defer></script>
 
     {{/* 如果页面参数 katex 为 true，则加载 KaTeX 模板 */}}
-    {{ if .Params.katex }}
-      {{ partial "katex.html" . }}
+    {{ if .Params.math }}
+      {{ partial "mathjax.html" . }}
     {{ end }}
 
 </head>

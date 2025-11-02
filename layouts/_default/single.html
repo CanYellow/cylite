@@ -20,6 +20,52 @@
         <div class="post-content">
             {{ .Content }}
         </div>
+
+        <!-- ======================================================= -->
+        <!-- ==              这里是新增的屁股 (文章页脚)          == -->
+        <!-- ======================================================= -->
+        <footer class="post-footer">
+            
+            {{/* 检查文章是否有分类 (Categories) */}}
+            {{ with .Params.categories }}
+            <div class="post-tags">
+                <span class="meta-label">分类:</span>
+                {{ range . }}
+                <a href="{{ "categories/" | absURL }}{{ . | urlize }}/">{{ . }}</a>
+                {{ end }}
+            </div>
+            {{ end }}
+
+            {{/* 检查文章是否有标签 (Tags) */}}
+            {{ with .Params.tags }}
+            <div class="post-tags">
+                <span class="meta-label">标签:</span>
+                {{ range . }}
+                <a href="{{ "tags/" | absURL }}{{ . | urlize }}/">{{ . }}</a>
+                {{ end }}
+            </div>
+            {{ end }}
+        </footer>
+        <!-- ======================================================= -->
+
+        <!-- ======================================================= -->
+        <!-- ==           这里是新增的自动相关文章              == -->
+        <!-- ======================================================= -->
+        {{ $related := .Site.RegularPages.Related . | first 5 }}
+        {{ with $related }}
+        <div class="related-posts-auto">
+            <h4>相关阅读</h4>
+            <ul>
+                {{ range . }}
+                <li>
+                    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                    {{/*<p class="summary">{{ .Summary | plainify | truncate 70 }}</p>*/}}
+                </li>
+                {{ end }}
+            </ul>
+            </div>
+            {{ end }}
+            <!-- ======================================================= -->
     </article>
 
     <!-- 
