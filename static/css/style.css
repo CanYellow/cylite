@@ -28,9 +28,7 @@ html.dark-mode {
 }
 
 
-/* --- 2. 核心布局 (使用 CSS Grid - 保证固定和独立滚动) --- */
-
-/* 步骤 1: 全局重置与基础设置 */
+/* --- 2. 核心布局 (使用 CSS Grid) --- */
 *, *::before, *::after {
     box-sizing: border-box;
 }
@@ -39,48 +37,37 @@ html {
     scroll-behavior: smooth;
 }
 
-/* 步骤 2: 将 body 设为占满视口的网格容器 */
 body {
     font-family: var(--font-sans);
     line-height: 1.65;
     background-color: var(--bg-primary);
     color: var(--text-primary);
     margin: 0;
-
-    /* === 布局核心 === */
     display: grid;
-    height: 100vh;      /* 高度严格等于视口高度，这是“固定”的关键 */
-    overflow: hidden;   /* 绝对核心：禁止 body 自身出现滚动条 */
-
-    /* 定义网格布局:
-       - 列: [侧边栏宽度] [剩余所有空间]
-       - 行: [占据所有可用空间] [页脚自适应高度]
-    */
+    height: 100vh;
+    overflow: hidden;
     grid-template-columns: var(--sidebar-width) 1fr;
     grid-template-rows: 1fr auto;
-    /* 定义网格区域名称，方便布局 */
     grid-template-areas:
         "sidebar main"
         "footer  footer";
 }
 
-/* 步骤 3: 【关键技巧】让包裹容器“消失”，将其子元素暴露给 body 的 Grid 布局 */
 .site-wrapper,
 .site-content-wrapper {
-    display: contents; /* 这会让这两个 div 在布局上被忽略，它们的子元素会成为 body 的直接子元素 */
+    display: contents;
 }
 
-/* 步骤 4: 将你的 HTML 元素分配到网格区域，并定义滚动行为 */
 .sidebar {
     grid-area: sidebar;
-    overflow-y: auto;   /* 关键：允许侧边栏内容过长时独立滚动 */
+    overflow-y: auto;
     background-color: var(--bg-secondary);
     border-right: 1px solid var(--border-color);
 }
 
 .main-content {
     grid-area: main;
-    overflow-y: auto;   /* 关键：允许主内容区域独立滚动 */
+    overflow-y: auto;
     padding: calc(var(--spacing-unit) * 2.5);
 }
 
@@ -88,47 +75,21 @@ body {
     grid-area: footer;
     background-color: var(--bg-secondary);
     border-top: 1px solid var(--border-color);
-    z-index: 10; /* 确保页脚在最上层 */
+    z-index: 10;
 }
 
-
-/* 内容居中容器 */
-/* 对于没有TOC的页面，使用这个规则来居中 */
-/* 步骤1: 为需要居中的元素（比如单篇文章页）保留居中规则 */
-.post-single {
-    margin: 0 auto;
-}
-
-/* 步骤2: 为 .post-list 设置左对齐 */
-.post-list {
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-    margin: 0; /* 移除左右的 auto，让它自然左对齐 */
-    /* 或者更明确地写: */
-    /* margin-left: 0; */
-    /* margin-right: auto; */
-}
-
-/* 步骤3: 将共享的 max-width 放在一起 */
-.post-list, .post-single {
-    max-width: var(--content-max-width);
-}
-
-
-
-/* --- 3. 侧边栏组件样式 (根据你的 nav.html 结构) --- */
+/* --- 3. 侧边栏组件样式 --- */
 .sidebar {
     display: flex;
     flex-direction: column;
     padding: 1.5rem;
 }
-.sidebar-header { text-align: left; margin-bottom: 2rem; }
+.sidebar-header { text-align: left; margin-bottom: 1rem; }
 .sidebar-brand { text-decoration: none; color: inherit; display: inline-block; }
 .sidebar-logo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem; }
 .sidebar-brand h1 { margin: 0; font-size: 1.5rem; }
 .sidebar-description { font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem; }
-.sidebar-social { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; font-size: 1.2rem; }
+/*.sidebar-social { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1rem; font-size: 1.2rem; }*/
 .sidebar-social a { color: var(--text-secondary); transition: color 0.2s; }
 .sidebar-social a:hover { color: var(--accent-primary); }
 .sidebar-nav ul { list-style: none; padding: 0; margin: 0; }
@@ -139,227 +100,447 @@ body {
 .theme-switcher button { font-size: 1rem; }
 .theme-switcher button:hover, .language-switcher a:hover { background-color: var(--bg-primary); }
 
-/* --- 4. 主内容区组件样式 (根据你的 index.html 结构) --- */
-.post-list { display: flex; flex-direction: column; gap: 2.5rem; }
-.post-card { display: flex; flex-direction: row; gap: 1.5rem; }
-.post-card-content { flex: 1; }
-.post-title { margin: 0 0 0.5rem 0; font-size: 1.5rem; }
-.post-title a { color: var(--text-primary); text-decoration: none; transition: color 0.2s; }
-.post-title a:hover { color: var(--accent-primary); }
-.post-meta { color: var(--text-secondary); font-size: 0.9em; margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;}
-.post-meta a { color: var(--text-secondary); text-decoration: none; }
-.post-meta a:hover { text-decoration: underline; color: var(--accent-primary); }
-.post-summary { color: var(--text-secondary); }
-.post-card-thumbnail { flex-shrink: 0; width: 200px; }
-.post-card-thumbnail img { width: 100%; height: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 8px; }
+/* 容器布局样式 */
+.sidebar-social {
+    display: flex;
+    justify-content: flex-start; /* 实现左对齐 */
+    gap: 1rem;                   /* 项目之间的间距 */
+    margin-bottom: 1rem;
+}
 
-/* 分页导航 */
+/* 图标本身的大小和颜色样式 */
+.sidebar-social a svg {
+    width: 24px;  /* 或者 1.5rem, 根据需要调整 */
+    height: 24px; /* 保持与 width 一致 */
+    stroke: var(--text-primary); /* 设置图标颜色 */
+    transition: stroke 0.2s ease-in-out;
+}
+
+/* 鼠标悬停时的效果 */
+.sidebar-social a:hover svg {
+    stroke: var(--text-secondary); /* 鼠标悬停时变为主题色 */
+}
+
+
+/* --- 4. 主内容区组件样式 --- */
+
+/* 
+ * 核心修正：
+ * 使用逗号 , 分隔选择器，让同一套样式规则
+ * 同时应用于文章正文 (.post-content a) 
+ * 和所有摘要区域 (.post-summary a)。
+ */
+.post-content a,
+.post-summary a {
+    color: var(--accent-primary);
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-primary);
+    transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    padding-bottom: 1px;
+}
+
+/* 鼠标悬停效果也需要同时应用 */
+.post-content a:hover,
+.post-summary a:hover {
+    color: var(--accent-hover);
+    border-bottom-color: var(--accent-hover);
+}
+
+/* 4a. 【新规则】列表页容器：靠左对齐 */
+/* 这将影响 index.html, list.html, terms.html */
+.post-list,
+.section-container {
+    max-width: var(--content-max-width);
+    margin-left: 0; /* 核心修改：移除 auto，实现左对齐 */
+    margin-right: auto; /* 保留，防止内容在窄屏下溢出 */
+}
+
+/* 4b. 【新规则】单篇文章页容器：保持居中 */
+/* 这将确保您的文章页面仍然是居中的，以获得最佳阅读体验 */
+.post-single {
+    max-width: var(--content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+/* 4b. 【关键修正】首页 (index.html) & 列表页 (list.html) 文章列表样式 */
+
+/* 统一文章列表容器 (div.post-list 和 ul.section-list) */
+.post-list,
+.section-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    list-style: none; /* 为 ul 移除默认的列表符号 */
+    padding: 0;       /* 为 ul 移除默认的内边距 */
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/*
+ * 这是针对 index.html 的文章卡片样式
+ * .post-card 是一个 <article>，内部有一个 .post-card-content 的 div
+ * 所以对它使用 display: flex 是正确的
+*/
+.post-card {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+}
+.post-card-content { flex: 1; }
+
+/*
+ * 这是针对 list.html 的文章列表项样式
+ * .section-item 是一个 <li>，它的子元素 h2, p, p 应该垂直排列
+ * 所以我们【不能】对它使用 display: flex
+ * 它只需要作为普通的块级元素存在即可，其样式由内部元素决定
+*/
+.section-item {
+    /* 无需特殊样式，保持默认的 block 布局即可 */
+}
+
+/* 统一文章标题样式 */
+.post-title,
+.section-post-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+}
+
+.post-title a,
+.section-post-title a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.post-title a:hover,
+.section-post-title a:hover {
+    color: var(--accent-primary);
+}
+
+/* 统一文章元信息和摘要样式 (这两个在模板中类名一致，可以直接共用) */
+.post-meta {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+.post-meta a {
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+.post-meta a:hover {
+    text-decoration: underline;
+    color: var(--accent-primary);
+}
+.post-summary {
+    color: var(--text-secondary);
+}
+
+/* 首页卡片缩略图样式 */
+.post-card-thumbnail {
+    flex-shrink: 0;
+    width: 200px;
+}
+.post-card-thumbnail img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* 4c. 分类/标签列表页 (terms.html) 样式 (保持不变) */
+.section-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.section-header h1 { margin: 0; }
+.taxonomy-description { margin-top: 1rem; color: var(--text-secondary); font-size: 1rem; }
+
+.terms-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+.terms-item a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+.terms-item a:hover {
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.terms-count {
+    background-color: var(--bg-primary);
+    color: var(--text-secondary);
+    font-size: 0.8em;
+    padding: 0.1rem 0.5rem;
+    border-radius: 10px;
+    transition: all 0.2s ease-in-out;
+}
+.terms-item a:hover .terms-count {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+
+/* 4d. 分页、页脚等通用组件 */
 .pagination { margin-top: 3rem; }
 .pagination-list { display: flex; justify-content: center; align-items: center; list-style: none; padding: 0; gap: 0.5rem; }
 .pagination-link { display: block; padding: 0.5rem 1rem; border: 1px solid var(--border-color); border-radius: 5px; text-decoration: none; color: var(--text-primary); transition: all 0.2s; }
 .pagination-link:hover, .pagination-link.is-current { background-color: var(--accent-primary); color: white; border-color: var(--accent-primary); }
 
-/* 页脚 */
-.site-footer { padding: calc(var(--spacing-unit) * 1.0); text-align: center; font-size: 0.8em; color: var(--text-secondary); 
-}
-.site-footer p {margin-block-start: 0.25rem;margin-block-end: 0.25rem;}
+.site-footer { padding: calc(var(--spacing-unit) * 1.0); text-align: center; font-size: 0.8em; color: var(--text-secondary); }
+.site-footer p { margin-block-start: 0.25rem; margin-block-end: 0.25rem; }
 .site-footer a { color: var(--accent-primary); text-decoration: none; }
 .site-footer a:hover { text-decoration: underline; }
 
-/* =================================================================== */
-/*  4c. 文章页 & 目录布局 (基于真实HTML的最终修正)                  */
-/* =================================================================== */
-
-/* ... (前面 .single-page-wrapper 和 .post-single 的部分保持不变) ... */
-.single-page-wrapper.with-toc {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 280px;
-    gap: 2rem;
-    height: 100%;
-    overflow: hidden;
-}
-
-.single-page-wrapper.with-toc .post-single {
-    max-width: 100%;
-    margin: 0;
-    overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    max-width: var(--content-max-width);
-    margin: 0 auto;
-}
-}
-.single-page-wrapper.with-toc .post-single::-webkit-scrollbar {
-    display: none;
-}
-
-/* --- ↓↓↓ 所有修正都在这里，请完整替换 ↓↓↓ --- */
-.toc-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background-color: var(--bg-secondary);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-/* 容器: 设为Flex布局，以便控制其子元素 (h3 和 nav) */
-.toc-content {
-    display: flex;
-    flex-direction: column;
-    height: 100%; /* 让它撑满 grid 单元格的高度 */
-    background-color: var(--bg-secondary);
-    border-radius: 8px;
-    overflow: hidden; /* 确保圆角能裁剪内部内容 */
-}
-
-/* 标题: 固定高度，不参与空间分配 */
-.toc-title {
-    padding: 1rem 1rem 0.5rem 1rem;
-    margin: 0;
-    font-weight: bold;
-    flex-shrink: 0; /* 禁止被压缩 */
-}
-
-/* 
-   导航容器 <nav>: ！！！这才是真正的魔法！！！
-   它作为 .toc-content 的直接子元素，是唯一需要被拉伸的块。
-*/
-.toc-content #TableOfContents {
-    /* 1. 吃掉所有剩余的垂直空间 */
-    flex-grow: 1;
-    
-    /* 2. 赋予它独立的滚动能力 */
-    overflow-y: auto;
-
-    /* 3. Flexbox 黑魔法，防止子元素溢出 */
-    min-height: 0;
-
-    /* 4. 隐藏他妈的滚动条 */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE, Edge */
-}
-.toc-content #TableOfContents::-webkit-scrollbar {
-    display: none; /* Chrome, Safari */
-}
-
-/* 
-   列表 <ul>: 现在它只需要负责自己的样式，
-   不再负责布局和滚动！
-*/
-.toc-content #TableOfContents ul {
-    list-style: none;
-    padding: 0 1rem 0rem 1rem; /* 调整一下padding，因为滚动条在nav上 */
-    margin: 0;
-}
-
-/* 目录项样式 (保持不变) */
-.toc-content li a {
-    display: block;
-    padding: 4px 0;
-    line-height: 1.4;
-    text-decoration: none;
-    color: var(--text-secondary);
-    transition: color 0.2s;
-}
+/* 4e. 文章页 & 目录布局 */
+.single-page-wrapper.with-toc { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 2rem; height: 100%; overflow: hidden; }
+.single-page-wrapper.with-toc .post-single::-webkit-scrollbar { display: none; }
+.single-page-wrapper.with-toc .post-single {overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; padding-right: 1rem;}
+.single-page-wrapper.with-toc .post-single::-webkit-scrollbar {display: none;}
+.toc-container { display: flex; flex-direction: column; height: 100%; background-color: var(--bg-secondary); border-radius: 8px; overflow: hidden; }
+.toc-content { display: flex; flex-direction: column; height: 100%; background-color: var(--bg-secondary); border-radius: 8px; overflow: hidden; }
+.toc-title { padding: 1rem 1rem 0.5rem 1rem; margin: 0; font-weight: bold; flex-shrink: 0; }
+.toc-content #TableOfContents { flex-grow: 1; overflow-y: auto; min-height: 0; scrollbar-width: none; -ms-overflow-style: none; }
+.toc-content #TableOfContents::-webkit-scrollbar { display: none; }
+.toc-content #TableOfContents ul { list-style: none; padding: 0 1rem 0rem 1rem; margin: 0; }
+.toc-content li a { display: block; padding: 4px 0; line-height: 1.4; text-decoration: none; color: var(--text-secondary); transition: color 0.2s; }
 .toc-content li a:hover { color: var(--accent-primary); }
 .toc-content ul ul { padding-left: 1rem; }
 
-/* ... (后面的 @media 媒体查询部分保持不变) ... */
-@media (max-width: 400px) {
-    .single-page-wrapper.with-toc {
+/* 4f. 主题切换器 UI */
+#theme-toggle-dark { display: inline-block; }
+#theme-toggle-light { display: none; }
+html.dark-mode #theme-toggle-dark { display: none; }
+html.dark-mode #theme-toggle-light { display: inline-block; }
+/* 控制主题切换SVG图标的大小和颜色 */
+.theme-switcher button svg {
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: middle;
+    /* 这句最关键，让图标颜色跟着按钮文字颜色走 */
+    stroke: currentColor; 
+}
+
+/* ==========================================================================
+   代码块容器美化 (为您的主题定制)
+   ========================================================================== */
+
+/* 1. 基础容器样式 (边距、圆角、字体等) */
+.highlight {
+  position: relative;
+  margin: 1.5em 0;    /* 上下外边距，与段落拉开距离 */
+  border-radius: 8px; /* 圆角 */
+  border: 1px solid var(--border-color); /* 使用您的边框颜色变量 */
+  overflow: hidden;   /* 确保内部内容不会溢出圆角 */
+}
+
+.highlight pre {
+  margin: 0;
+  padding: 1.5em;       /* 充足的内边距 */
+  overflow-x: auto;     /* 代码过长时，出现水平滚动条 */
+  font-size: 0.9em;
+}
+
+.highlight pre code {
+  font-family: 'Consolas', 'Menlo', 'Courier New', monospace;
+  font-weight: 400;     /* 解决字体过细问题，400是标准粗细 */
+  line-height: 1.6;
+}
+
+/* ======================================================= */
+/* ==         6. 代码块复制按钮 (新增)                  == */
+/* ======================================================= */
+
+/* 1. 让 .highlight 容器成为按钮定位的参照物 */
+.highlight {
+  position: relative;
+}
+
+/* 2. 复制按钮的基础样式 */
+.clipboard-button {
+  /* 定位在右上角 */
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  z-index: 10;
+
+  /* 外观与尺寸 */
+  display: block;
+  padding: 6px;
+  font-size: 14px;
+  line-height: 1; /* 确保SVG图标垂直居中 */
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+
+  /* 默认状态下半透明，减少干扰 */
+  opacity: 0.6;
+  transition: opacity 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+/* 3. 按钮内的 SVG 图标颜色，使用 currentColor 继承按钮的 color */
+.clipboard-button svg {
+  fill: var(--text-secondary); /* 使用次要文字颜色，更柔和 */
+  transition: fill 0.2s ease-in-out;
+}
+
+/* 4. 交互效果：鼠标悬停或聚焦时 */
+.clipboard-button:hover,
+.clipboard-button:focus {
+  opacity: 1;
+  border-color: var(--accent-primary); /* 悬停时边框使用主题强调色 */
+}
+
+.clipboard-button:hover svg,
+.clipboard-button:focus svg {
+  fill: var(--accent-primary); /* 悬停时图标也使用主题强调色 */
+}
+
+/* 当用户鼠标悬停在整个代码块上时，也让按钮完全显示 */
+.highlight:hover > .clipboard-button {
+  opacity: 1;
+}
+
+/* ======================================================= */
+/* ==       7. 滚动条美化 (优化对比度版本)              == */
+/* ======================================================= */
+
+/* --- 新增：为滚动条定义专属颜色变量 --- */
+:root {
+    /* 使用主文字颜色的半透明版本，确保清晰可见 */
+    --scrollbar-thumb-color: rgba(44, 62, 80, 0.3);   /* #2C3E50 at 30% opacity */
+    --scrollbar-thumb-hover-color: rgba(44, 62, 80, 0.5); /* #2C3E50 at 50% opacity */
+}
+
+html.dark-mode {
+    --scrollbar-thumb-color: rgba(234, 236, 239, 0.3); /* #EAECEF at 30% opacity */
+    --scrollbar-thumb-hover-color: rgba(234, 236, 239, 0.5); /* #EAECEF at 50% opacity */
+}
+
+
+/* --- 7a. 全局滚动条样式 --- */
+
+/* Firefox 兼容性 */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-color) var(--bg-primary);
+}
+
+/* Chrome, Edge, Safari (WebKit) */
+::-webkit-scrollbar {
+  width: 10px; /* 稍微加宽一点，更容易点击 */
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent; /* 轨道设为透明，更简洁 */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color);
+  border-radius: 10px;
+  border: 2px solid var(--bg-primary); /* 使用背景色作为边框，营造悬浮感 */
+  background-clip: padding-box; /* 让背景色只在 padding 区域内绘制，边框颜色更纯粹 */
+  transition: background-color 0.2s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover-color);
+}
+
+
+/* --- 8. 移动端适配 (Responsive Design) --- */
+@media (max-width: 992px) {
+    body {
         display: block;
         height: auto;
         overflow: visible;
     }
-
-    .single-page-wrapper.with-toc .post-single {
-        overflow-y: visible;
+    .site-wrapper, .site-content-wrapper { display: block; }
+    .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); overflow-y: visible; height: auto; }
+    .main-content { overflow-y: visible; height: auto; padding: 1.5rem; }
+    
+    .post-list, .section-container, .post-single {
+        margin-left: 0;
+        margin-right: 0;
     }
     
-    .toc-container {
-        margin-bottom: 2rem;
-    }
-}
-
-/* --- 3. 主题切换器 UI 优化 --- */
-
-/* 默认情况下，显示暗色模式的切换按钮（月亮） */
-#theme-toggle-dark {
-    display: inline-block;
-}
-#theme-toggle-light {
-    display: none; /* 隐藏太阳按钮 */
-}
-
-/* 当处于暗色模式时 */
-html.dark-mode #theme-toggle-dark {
-    display: none; /* 隐藏月亮按钮 */
-}
-
-html.dark-mode #theme-toggle-light {
-    display: inline-block; /* 显示太阳按钮 */
-}
-
-
-/* --- 5. 移动端适配 (Responsive Design) --- */
-
-@media (max-width: 992px) {
-    /* 步骤 1: 撤销 body 上的 Grid 布局，恢复为正常的文档流 */
-    body {
-        display: block;
-        height: auto;
-        overflow: visible; /* 恢复全局滚动条 */
-    }
-
-    /* 步骤 2: 恢复包裹容器的正常块级行为 */
-    .site-wrapper,
-    .site-content-wrapper {
-        display: block;
-    }
-
-    /* 步骤 3: 调整主要区域的样式 */
-    .sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-        overflow-y: visible; /* 禁用独立滚动 */
-        height: auto;
-    }
-
-    .main-content {
-        overflow-y: visible; /* 禁用独立滚动 */
-        height: auto;
-        padding: 1.5rem;
-    }
-
-    /* 移动端文章卡片布局调整为上下结构 */
+    /* 移动端，首页和列表页的卡片布局都变成上下结构 */
     .post-card {
         flex-direction: column-reverse; /* 图片在上，文字在下 */
     }
-
-    .post-card-thumbnail {
-        width: 100%;
-    }
-
-    /* --- 新增：处理文章页和TOC在移动端的布局 --- */
+    .post-card-thumbnail { width: 100%; }
     
-    /* 撤销桌面端的Grid布局，让文章和TOC垂直堆叠 */
-    .single-page-wrapper.with-toc {
-        display: flex;
-        flex-direction: column; /* 让TOC在文章上面 */
-    }
+    .single-page-wrapper.with-toc { display: flex; flex-direction: column; }
+    .toc-container { order: -1; position: static; max-height: none; width: 100%; margin-bottom: 2rem; background-color: var(--bg-secondary); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); }
+}
 
-    /* 把目录放在文章内容的上方 */
-    .toc-container {
-        order: -1; /* Flexbox魔法：让TOC显示在最前面 */
-        position: static; /* 撤销粘性定位 */
-        max-height: none; /* 移除最大高度限制 */
-        width: 100%;
-        margin-bottom: 2rem;
-        background-color: var(--bg-secondary);
-        padding: 1rem;
-        border-radius: 8px;
-        border: 1px solid var(--border-color);
-    }
+@media (max-width: 400px) {
+    .single-page-wrapper.with-toc { display: block; height: auto; overflow: visible; }
+    .single-page-wrapper.with-toc .post-single { overflow-y: visible; }
+    .toc-container { margin-bottom: 2rem; }
+}
+
+
+/* Footer 备案信息容器 - 核心 Flexbox 布局 */
+.footer-beian-container {
+    display: flex;             /* 1. 启用 Flexbox 布局，使其子元素并排 */
+    justify-content: center;   /* 2. 在主轴（水平方向）上居中，实现“整体居中” */
+    align-items: center;       /* 3. 在交叉轴（垂直方向）上居中，确保所有内容垂直对齐 */
+    gap: 1.5rem;               /* 4. 在两个备案号之间创建 1.5 个字符的间距 */
+    flex-wrap: wrap;           /* 5. (推荐) 在屏幕很窄时，允许换行，防止溢出 */
+    
+    padding: 0.5rem 0;
+}
+
+/* 容器内所有链接的通用样式 */
+.footer-beian-container a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+.footer-beian-container a:hover {
+    color: var(--text-secondary);
+    text-decoration: underline;
+}
+
+/* 公安备案链接的特殊样式 (为了对齐内部的图标和文字) */
+.gongan-beian {
+    /* 自身也是一个小型的 Flexbox 容器 */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem; /* 图标和文字之间的间距 */
+}
+
+/* 公安备案图标的大小 */
+.gongan-beian svg {
+    width: 16px;
+    height: 16px;
 }

@@ -34,13 +34,16 @@
 <meta name="description" content="{{ $description }}">
 <meta name="author" content="{{ $site.Params.author | default "Author" }}">
 
-<!-- ======================================================= -->
-<!-- ==              在这里引入 Font Awesome              == -->
-<!-- ======================================================= -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
- 
 
-<link rel="stylesheet" href="{{ "/css/style.css" | relURL }}">
+<link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+
+    
+<!-- 2. 引入语法高亮样式 -->
+<link rel="stylesheet" href="{{ "css/syntax.css" | relURL }}">
+
+<!-- 3. 新增：引入 Markdown 内容样式 -->
+<link rel="stylesheet" href="{{ "css/markdown.css" | relURL }}">
+
 
 <!-- 3. Canonical URL: 告诉搜索引擎这是内容的“官方”版本 -->
 <link rel="canonical" href="{{ $page.Permalink }}">
@@ -104,4 +107,8 @@
 
 {{/* --- 引入主题切换的 JS 文件 --- */}}
 <script src="{{ "js/theme-switcher.js" | relURL }}" defer></script>
+
+
+{{/* --- 引入代码块复制的 JS 文件 --- */}}
+<script src="{{ "js/copy-code.js" | relURL }}" defer></script>
 

@@ -1,4 +1,28 @@
 <footer class="site-footer">
-    <p>&copy; {{ now.Format "2006" }} {{ .Site.Title }}. All rights reserved.</p>
-    <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> &amp; Minima Theme.</p>
+    <!-- 第一行：版权和技术栈信息 -->
+    <p>
+        &copy; {{ now.Format "2006" }} {{ .Site.Title }}. All rights reserved. &emsp; Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a href="https://github.com/CanYellow/cylite" target="_blank" rel="noopener noreferrer">cylite</a> Theme.
+    </p>
+
+    <!-- 第二部分：网站备案信息 (动态加载) -->
+    {{/* /layouts/partials/footer.html */}}
+
+    {{ with .Site.Params.beian }}
+      {{ if .enable }}
+        <!-- 使用一个 div 作为 Flexbox 容器 -->
+        <div class="footer-beian-container">
+          <!-- ICP 备案链接 -->
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">{{ .icp }}</a>
+
+          <!-- 公安备案链接 -->
+          <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode={{ .gongan_record_code }}" class="gongan-beian" target="_blank" rel="noopener noreferrer">
+            <!-- 公安备案图标 -->
+            <svg width="20" height="20" viewBox="0 0 1024 1024" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <path d="M925.248 405.504 L570.88 405.504 L570.88 122.88 C570.88 108.032 563.712 94.72 551.424 85.504 C539.136 76.288 523.264 71.68 507.904 71.68 C492.544 71.68 476.672 76.288 464.384 85.504 C452.096 94.72 444.928 108.032 444.928 122.88 L444.928 405.504 L98.304 405.504 C72.192 405.504 51.2 426.496 51.2 452.608 L51.2 892.416 C51.2 918.528 72.192 939.52 98.304 939.52 L925.248 939.52 C951.36 939.52 972.352 918.528 972.352 892.416 L972.352 452.608 C972.352 426.496 951.36 405.504 925.248 405.504 Z" />
+            </svg>
+            <span>{{ .gongan_text }}</span>
+          </a>
+        </div>
+      {{ end }}
+    {{ end }}
 </footer>

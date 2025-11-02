@@ -23,7 +23,8 @@
                     <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006年1月2日" }}</time>
                     &middot; <span>阅读约 {{ .ReadingTime }} 分钟</span>
                 </p>
-                <p class="post-summary">{{ .Summary }}</p>
+                {{/* 修正：使用 div 来包裹 .Summary */}}
+                <div class="post-summary">{{ .Summary | safeHTML }}</div>
             </li>
         {{ end }}
     </ul>

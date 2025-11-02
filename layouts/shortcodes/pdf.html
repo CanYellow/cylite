@@ -1,0 +1,83 @@
+<!-- layouts/shortcodes/pdf.html (最终版) -->
+{{- $src := .Get "src" | default "" -}}
+{{- if not $src -}}
+  {{- errorf "shortcode 'pdf' requires a 'src' parameter. Example: {{< pdf src=\"/files/doc.pdf\" >}}" -}}
+{{- end -}}
+
+{{- $id := printf "pdf-viewer-%d" .Ordinal -}}
+{{- $fallbackId := printf "pdf-fallback-%d" .Ordinal -}}
+{{- $params := slice -}}
+{{- with .Get "page" }}{{ $params = $params | append (printf "page=%s" .) }}{{ end -}}
+{{- with .Get "zoom" }}{{ $params = $params | append (printf "zoom=%s" .) }}{{ end -}}
+{{- with .Get "view" }}{{ $params = $params | append (printf "view=%s" .) }}{{ end -}}
+{{- with .Get "toolbar" }}{{ $params = $params | append (printf "toolbar=%s" .) }}{{ end -}}
+{{- with .Get "navpanes" }}{{ $params = $params | append (printf "navpanes=%s" .) }}{{ end -}}
+{{- $hash := "" -}}
+{{- if gt (len $params) 0 -}}
+  {{- $hash = printf "#%s" (delimit $params "&") -}}
+{{- end -}}
+
+<div class="pdf-viewer-wrapper">
+  <div class="pdf-viewer-container" style="display: flex; justify-content: center; margin: 20px 0; pointer-events: none;">
+    <iframe
+      id="{{ $id }}"
+      src="{{ $src }}{{ $hash }}"
+      style="width: 100%; max-width: 800px; aspect-ratio: 210 / 297; border: 1px solid #ccc; pointer-events: auto;"
+      allowfullscreen
+      loading="lazy">
+    </iframe>
+  </div>
+  <p id="{{ $fallbackId }}" class="pdf-fallback" style="display: none; text-align: center; margin-top: 0.5rem; font-size: 0.9em;">
+    PDF 预览加载失败。请 <a href="{{ $src }}" target="_blank" rel="noopener noreferrer">点击这里下载或在新标签页中查看</a>。
+  </p>
+</div>
+
+<!-- ⭐ 唯一的修改在这里！ -->
+<script>
+  (function() {
+    const iframe = document.getElementById('{{ $id }}');
+    const fallback = document.getElementById('{{ $fallbackId }}');
+    let hasLoaded = false;
+
+    const timeoutId = setTimeout(function() {
+      if (!hasLoaded) {
+        fallback.style.display = 'block';
+      }
+    }, 8000);
+
+    iframe.onload = function() {
+      hasLoaded = true;
+      clearTimeout(timeoutId);
+
+      try {
+        const iframeDoc = iframe.contentWindow.document;
+        if (!iframeDoc) return;
+
+        iframeDoc.addEventListener('wheel', function(e) {
+          const isScrollingUp = e.deltaY < 0;
+          const isScrollingDown = e.deltaY > 0;
+          
+          const content = iframeDoc.documentElement || iframeDoc.body;
+          const isAtTop = content.scrollTop === 0;
+          const isAtBottom = content.scrollHeight - content.scrollTop <= content.clientHeight + 1;
+
+          if ((isScrollingUp && isAtTop) || (isScrollingDown && isAtBottom)) {
+            e.preventDefault();
+
+            // ⭐ 核心修改：不再滚动 window，而是找到 .post-single 并滚动它
+            const scrollableParent = iframe.closest('.post-single');
+            if (scrollableParent) {
+              scrollableParent.scrollBy(0, e.deltaY);
+            } else {
+              // 作为后备，如果找不到 .post-single，仍然尝试滚动主窗口
+              window.scrollBy(0, e.deltaY);
+            }
+          }
+        }, { passive: false });
+
+      } catch (error) {
+        console.warn('Could not add smart scroll to PDF iframe due to cross-origin restrictions.', error);
+      }
+    };
+  })();
+</script>

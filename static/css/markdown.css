@@ -1,0 +1,151 @@
+/* ======================================================= */
+/* ==      5. 更完整的 Markdown 元素样式 (终极版)       == */
+/* ======================================================= */
+
+/* --- 新增：为行内代码定义颜色变量 (采用专业、和谐的暖色调) --- */
+:root {
+    --code-inline-text: var(--text-primary);
+    --code-inline-bg: var(--bg-secondary);
+    --code-inline-border: var(--border-color);
+}
+
+/* --- 5a. 标题 (微调) --- */
+.post-content h1, .post-content h2, .post-content h3,
+.post-content h4, .post-content h5, .post-content h6 {
+    margin-top: 1.8em;
+    margin-bottom: 0.6em;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* --- 5b. 分割线 <hr> --- */
+hr {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 1.8em 0;
+}
+
+/* --- 5c. 列表 <ul> 和 <ol> --- */
+.post-content ul, .post-content ol {
+    padding-left: 1.5em;
+    margin: 1em 0;
+}
+.post-content li {
+    margin-bottom: 0.5em;
+}
+.post-content li > p {
+    margin: 0;
+}
+
+
+/* --- 5d. 图片 <img> --- */
+.post-content img {
+    max-width: 75%;
+    height: auto;
+    display: block;
+    margin: 1.2em auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+html.dark-mode .post-content img {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+
+/* --- 5e. 表格 <table> --- */
+.post-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.2em 0;
+    font-size: 0.9em;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.post-content th, .post-content td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.post-content thead tr {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.post-content tbody tr:nth-of-type(even) {
+    background-color: var(--bg-secondary);
+}
+
+.post-content tbody tr:last-of-type {
+    border-bottom: none;
+}
+
+
+/* --- 5f. 行内代码 <code> (新颜色方案) --- */
+.post-content :not(pre) > code {
+    font-family: var(--font-mono, 'Consolas', 'Menlo', 'Courier New', monospace);
+    font-size: 0.875em;
+    padding: 0.2em 0.4em;
+    margin: 0 0.1em;
+    border-radius: 4px;
+    background-color: var(--code-inline-bg);
+    color: var(--code-inline-text);
+    border: 1px solid var(--code-inline-border);
+}
+
+
+/* --- 代码块 .highlight (密度调整 & 健壮性) --- */
+.highlight {
+    position: relative;
+    margin: 1.2em 0;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    background-color: var(--bg-secondary);
+}
+
+.highlight pre {
+    margin: 0;
+    padding: 1.2em;
+    overflow-x: auto;
+    font-size: 0.9em;
+}
+
+.highlight pre code {
+    font-family: var(--font-mono, 'Consolas', 'Menlo', 'Courier New', monospace);
+    font-weight: 400;
+    line-height: 1.6;
+    /* 重置样式，防止被行内代码的样式污染 */
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+}
+
+
+
+/* --- 7b. 代码块内部的水平滚动条样式 --- */
+
+/* Firefox 兼容性 */
+.highlight pre {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-color) var(--bg-secondary);
+}
+
+/* Chrome, Edge, Safari (WebKit) */
+.highlight pre::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.highlight pre::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color);
+  border: 2px solid var(--bg-secondary); /* 边框使用代码块的背景色 */
+}
+
+.highlight pre::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover-color);
+}
+
