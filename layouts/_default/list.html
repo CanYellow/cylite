@@ -1,0 +1,34 @@
+{{/* layouts/_default/list.html */}}
+{{ define "main" }}
+<div class="section-container">
+    <header class="section-header">
+        <!-- .Title 在 /posts/ 下是 "Posts", 在 /categories/技术/ 下是 "技术" -->
+        <h1>{{ .Title }}</h1>
+        
+        {{/* 可以在这里添加描述信息，比如分类的描述 */}}
+        {{ with .Content }}
+            <div class="taxonomy-description">
+                {{ . }}
+            </div>
+        {{ end }}
+
+    </header>
+    <ul class="section-list">
+        <!-- 使用分页器来处理文章列表 -->
+        {{ $paginator := .Paginate .Pages.ByDate.Reverse }}
+        {{ range $paginator.Pages }}
+            <li class="section-item">
+                <h2 class="section-post-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+                <p class="post-meta">
+                    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006年1月2日" }}</time>
+                    &middot; <span>阅读约 {{ .ReadingTime }} 分钟</span>
+                </p>
+                <p class="post-summary">{{ .Summary }}</p>
+            </li>
+        {{ end }}
+    </ul>
+
+    <!-- 引入分页导航 partial -->
+    {{ partial "pagination.html" . }}
+</div>
+{{ end }}

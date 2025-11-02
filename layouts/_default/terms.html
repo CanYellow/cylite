@@ -1,0 +1,27 @@
+{{/* layouts/_default/terms.html */}}
+{{ define "main" }}
+<div class="section-container">
+    <header class="section-header">
+        <!-- .Title 在这里会是 "Categories" 或 "Tags" -->
+        <h1>{{ .Title }}</h1>
+    </header>
+    
+    <!-- 这里我们不遍历 .Pages，而是遍历 .Data.Terms -->
+    <ul class="terms-list">
+        {{/* 
+            .Data.Terms 包含了这个分类法下的所有项目（比如所有分类名）
+            .ByCount 可以按每个分类下的文章数量排序，你也可以用 .Alphabetical 按字母排序
+        */}}
+        {{ range .Data.Terms.ByCount }}
+            <li class="terms-item">
+                <a href="{{ .Page.RelPermalink }}">
+                    <!-- .Page.Title 是分类或标签的名称 -->
+                    {{ .Page.Title }}
+                    <!-- .Count 是该分类或标签下的文章数量 -->
+                    <span class="terms-count">{{ .Count }}</span>
+                </a>
+            </li>
+        {{ end }}
+    </ul>
+</div>
+{{ end }}

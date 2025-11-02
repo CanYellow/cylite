@@ -1,0 +1,52 @@
+{{/* layouts/index.html */}}
+{{- define "main" -}}
+<div class="post-list">
+
+    {{/*
+      使用分页器来获取文章列表。
+      我们从配置的 mainSections 中筛选常规页面。
+      这是构建列表页的最佳实践。
+    */}}
+    {{ $paginator := .Paginate (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) }}
+    {{ range $paginator.Pages }}
+
+    {{/* 每个文章卡片 */}}
+    <article class="post-card">
+        
+        {{/* 左侧：文章文字内容 */}}
+        <div class="post-card-content">
+            <h2 class="post-title">
+                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            </h2>
+            
+            <div class="post-meta">
+                {{/* 日期 */}}
+                <span><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></span>
+                
+                {{/* 阅读时长 */}}
+                <span>&middot; {{ .ReadingTime }} min read</span>
+                
+                {{/* 分类 */}}
+                {{ with .Params.categories }}
+                <span>&middot; In
+                    {{ range $index, $category := . }}
+                        {{- if $index }}, {{ end }}
+                        <a href="{{ "/categories/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
+                    {{- end }}
+                </span>
+                {{ end }}
+            </div>
+
+            <div class="post-summary">
+                {{ .Summary }}
+            </div>
+        </div>
+
+    </article>
+    {{ end }}
+</div>
+
+{{/* 别忘了添加分页导航 */}}
+{{ partial "pagination.html" . }}
+
+{{- end -}}

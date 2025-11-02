@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en-us" }}">
+
+    {{/* head: title, setting, meta data, seo data */}}
+    {{- partial "head.html" . -}}
+
+    <body>
+
+        {{/*使用一个总的 site-wrapper 或 page-wrapper 来包裹所有内容，这对于实现粘性页脚等整体布局非常方便。*/}}
+        <div class="site-wrapper">
+
+            {{/*这里可以放置一个全局的 header，如果你的导航是顶部导航的话。*/}}
+            {{- /* partial "header.html" . */ -}}
+
+            {{/* 用于实现 侧边栏+主内容 的布局 */}}
+            <div class="site-content-wrapper">
+
+                {{/*导航栏应该由 <nav> 或 <aside> 标签包裹*/}}
+                {{- partial "nav.html" . -}}
+
+                {{/*使用 <main> 标签包裹核心内容区域，这是语义化和可访问性的最佳实践。*/}}
+                <main class="main-content">
+                    {{- block "main" . }}{{- end }}
+                </main>
+
+            </div>
+        </div>
+
+        {{/* 页脚应该由 <footer> 标签包裹 */}}
+        {{- partial "footer.html" . -}}
+
+    </body>
+</html>

@@ -1,0 +1,365 @@
+/* static/css/style.css - 最终修正版 */
+
+/* --- 1. 变量定义 --- */
+:root {
+    /* 亮色模式 */
+    --bg-primary: #F7F8FA;
+    --bg-secondary: #FFFFFF;
+    --text-primary: #2C3E50;
+    --text-secondary: #5A6F82;
+    --border-color: #EAECEF;
+    --accent-primary: #3498DB;
+    --accent-hover: #2980B9;
+    --sidebar-width: 280px;
+    --content-max-width: 700px;
+    --spacing-unit: 1rem;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html.dark-mode {
+    /* 暗色模式 */
+    --bg-primary: #1C2833;
+    --bg-secondary: #273746;
+    --text-primary: #EAECEF;
+    --text-secondary: #AABBCB;
+    --border-color: #3C4F60;
+    --accent-primary: #5DADE2;
+    --accent-hover: #85C1E9;
+}
+
+
+/* --- 2. 核心布局 (使用 CSS Grid - 保证固定和独立滚动) --- */
+
+/* 步骤 1: 全局重置与基础设置 */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* 步骤 2: 将 body 设为占满视口的网格容器 */
+body {
+    font-family: var(--font-sans);
+    line-height: 1.65;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    margin: 0;
+
+    /* === 布局核心 === */
+    display: grid;
+    height: 100vh;      /* 高度严格等于视口高度，这是“固定”的关键 */
+    overflow: hidden;   /* 绝对核心：禁止 body 自身出现滚动条 */
+
+    /* 定义网格布局:
+       - 列: [侧边栏宽度] [剩余所有空间]
+       - 行: [占据所有可用空间] [页脚自适应高度]
+    */
+    grid-template-columns: var(--sidebar-width) 1fr;
+    grid-template-rows: 1fr auto;
+    /* 定义网格区域名称，方便布局 */
+    grid-template-areas:
+        "sidebar main"
+        "footer  footer";
+}
+
+/* 步骤 3: 【关键技巧】让包裹容器“消失”，将其子元素暴露给 body 的 Grid 布局 */
+.site-wrapper,
+.site-content-wrapper {
+    display: contents; /* 这会让这两个 div 在布局上被忽略，它们的子元素会成为 body 的直接子元素 */
+}
+
+/* 步骤 4: 将你的 HTML 元素分配到网格区域，并定义滚动行为 */
+.sidebar {
+    grid-area: sidebar;
+    overflow-y: auto;   /* 关键：允许侧边栏内容过长时独立滚动 */
+    background-color: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+}
+
+.main-content {
+    grid-area: main;
+    overflow-y: auto;   /* 关键：允许主内容区域独立滚动 */
+    padding: calc(var(--spacing-unit) * 2.5);
+}
+
+.site-footer {
+    grid-area: footer;
+    background-color: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    z-index: 10; /* 确保页脚在最上层 */
+}
+
+
+/* 内容居中容器 */
+/* 对于没有TOC的页面，使用这个规则来居中 */
+/* 步骤1: 为需要居中的元素（比如单篇文章页）保留居中规则 */
+.post-single {
+    margin: 0 auto;
+}
+
+/* 步骤2: 为 .post-list 设置左对齐 */
+.post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    margin: 0; /* 移除左右的 auto，让它自然左对齐 */
+    /* 或者更明确地写: */
+    /* margin-left: 0; */
+    /* margin-right: auto; */
+}
+
+/* 步骤3: 将共享的 max-width 放在一起 */
+.post-list, .post-single {
+    max-width: var(--content-max-width);
+}
+
+
+
+/* --- 3. 侧边栏组件样式 (根据你的 nav.html 结构) --- */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+}
+.sidebar-header { text-align: left; margin-bottom: 2rem; }
+.sidebar-brand { text-decoration: none; color: inherit; display: inline-block; }
+.sidebar-logo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem; }
+.sidebar-brand h1 { margin: 0; font-size: 1.5rem; }
+.sidebar-description { font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem; }
+.sidebar-social { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; font-size: 1.2rem; }
+.sidebar-social a { color: var(--text-secondary); transition: color 0.2s; }
+.sidebar-social a:hover { color: var(--accent-primary); }
+.sidebar-nav ul { list-style: none; padding: 0; margin: 0; }
+.sidebar-nav a { display: block; padding: 0.75rem 1rem; text-decoration: none; color: var(--text-primary); border-radius: 6px; transition: background-color 0.2s, color 0.2s; font-weight: 500;}
+.sidebar-nav a:hover, .sidebar-nav li.active a { background-color: var(--accent-primary); color: white; }
+.sidebar-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid var(--border-color); }
+.language-switcher a, .theme-switcher button { background: none; border: 1px solid var(--border-color); padding: 0.5rem 0.75rem; border-radius: 5px; cursor: pointer; color: var(--text-primary); text-decoration: none; font-size: 0.9rem;}
+.theme-switcher button { font-size: 1rem; }
+.theme-switcher button:hover, .language-switcher a:hover { background-color: var(--bg-primary); }
+
+/* --- 4. 主内容区组件样式 (根据你的 index.html 结构) --- */
+.post-list { display: flex; flex-direction: column; gap: 2.5rem; }
+.post-card { display: flex; flex-direction: row; gap: 1.5rem; }
+.post-card-content { flex: 1; }
+.post-title { margin: 0 0 0.5rem 0; font-size: 1.5rem; }
+.post-title a { color: var(--text-primary); text-decoration: none; transition: color 0.2s; }
+.post-title a:hover { color: var(--accent-primary); }
+.post-meta { color: var(--text-secondary); font-size: 0.9em; margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;}
+.post-meta a { color: var(--text-secondary); text-decoration: none; }
+.post-meta a:hover { text-decoration: underline; color: var(--accent-primary); }
+.post-summary { color: var(--text-secondary); }
+.post-card-thumbnail { flex-shrink: 0; width: 200px; }
+.post-card-thumbnail img { width: 100%; height: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 8px; }
+
+/* 分页导航 */
+.pagination { margin-top: 3rem; }
+.pagination-list { display: flex; justify-content: center; align-items: center; list-style: none; padding: 0; gap: 0.5rem; }
+.pagination-link { display: block; padding: 0.5rem 1rem; border: 1px solid var(--border-color); border-radius: 5px; text-decoration: none; color: var(--text-primary); transition: all 0.2s; }
+.pagination-link:hover, .pagination-link.is-current { background-color: var(--accent-primary); color: white; border-color: var(--accent-primary); }
+
+/* 页脚 */
+.site-footer { padding: calc(var(--spacing-unit) * 1.0); text-align: center; font-size: 0.8em; color: var(--text-secondary); 
+}
+.site-footer p {margin-block-start: 0.25rem;margin-block-end: 0.25rem;}
+.site-footer a { color: var(--accent-primary); text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
+
+/* =================================================================== */
+/*  4c. 文章页 & 目录布局 (基于真实HTML的最终修正)                  */
+/* =================================================================== */
+
+/* ... (前面 .single-page-wrapper 和 .post-single 的部分保持不变) ... */
+.single-page-wrapper.with-toc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 2rem;
+    height: 100%;
+    overflow: hidden;
+}
+
+.single-page-wrapper.with-toc .post-single {
+    max-width: 100%;
+    margin: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+}
+}
+.single-page-wrapper.with-toc .post-single::-webkit-scrollbar {
+    display: none;
+}
+
+/* --- ↓↓↓ 所有修正都在这里，请完整替换 ↓↓↓ --- */
+.toc-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* 容器: 设为Flex布局，以便控制其子元素 (h3 和 nav) */
+.toc-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* 让它撑满 grid 单元格的高度 */
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+    overflow: hidden; /* 确保圆角能裁剪内部内容 */
+}
+
+/* 标题: 固定高度，不参与空间分配 */
+.toc-title {
+    padding: 1rem 1rem 0.5rem 1rem;
+    margin: 0;
+    font-weight: bold;
+    flex-shrink: 0; /* 禁止被压缩 */
+}
+
+/* 
+   导航容器 <nav>: ！！！这才是真正的魔法！！！
+   它作为 .toc-content 的直接子元素，是唯一需要被拉伸的块。
+*/
+.toc-content #TableOfContents {
+    /* 1. 吃掉所有剩余的垂直空间 */
+    flex-grow: 1;
+    
+    /* 2. 赋予它独立的滚动能力 */
+    overflow-y: auto;
+
+    /* 3. Flexbox 黑魔法，防止子元素溢出 */
+    min-height: 0;
+
+    /* 4. 隐藏他妈的滚动条 */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE, Edge */
+}
+.toc-content #TableOfContents::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}
+
+/* 
+   列表 <ul>: 现在它只需要负责自己的样式，
+   不再负责布局和滚动！
+*/
+.toc-content #TableOfContents ul {
+    list-style: none;
+    padding: 0 1rem 0rem 1rem; /* 调整一下padding，因为滚动条在nav上 */
+    margin: 0;
+}
+
+/* 目录项样式 (保持不变) */
+.toc-content li a {
+    display: block;
+    padding: 4px 0;
+    line-height: 1.4;
+    text-decoration: none;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+}
+.toc-content li a:hover { color: var(--accent-primary); }
+.toc-content ul ul { padding-left: 1rem; }
+
+/* ... (后面的 @media 媒体查询部分保持不变) ... */
+@media (max-width: 400px) {
+    .single-page-wrapper.with-toc {
+        display: block;
+        height: auto;
+        overflow: visible;
+    }
+
+    .single-page-wrapper.with-toc .post-single {
+        overflow-y: visible;
+    }
+    
+    .toc-container {
+        margin-bottom: 2rem;
+    }
+}
+
+/* --- 3. 主题切换器 UI 优化 --- */
+
+/* 默认情况下，显示暗色模式的切换按钮（月亮） */
+#theme-toggle-dark {
+    display: inline-block;
+}
+#theme-toggle-light {
+    display: none; /* 隐藏太阳按钮 */
+}
+
+/* 当处于暗色模式时 */
+html.dark-mode #theme-toggle-dark {
+    display: none; /* 隐藏月亮按钮 */
+}
+
+html.dark-mode #theme-toggle-light {
+    display: inline-block; /* 显示太阳按钮 */
+}
+
+
+/* --- 5. 移动端适配 (Responsive Design) --- */
+
+@media (max-width: 992px) {
+    /* 步骤 1: 撤销 body 上的 Grid 布局，恢复为正常的文档流 */
+    body {
+        display: block;
+        height: auto;
+        overflow: visible; /* 恢复全局滚动条 */
+    }
+
+    /* 步骤 2: 恢复包裹容器的正常块级行为 */
+    .site-wrapper,
+    .site-content-wrapper {
+        display: block;
+    }
+
+    /* 步骤 3: 调整主要区域的样式 */
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        overflow-y: visible; /* 禁用独立滚动 */
+        height: auto;
+    }
+
+    .main-content {
+        overflow-y: visible; /* 禁用独立滚动 */
+        height: auto;
+        padding: 1.5rem;
+    }
+
+    /* 移动端文章卡片布局调整为上下结构 */
+    .post-card {
+        flex-direction: column-reverse; /* 图片在上，文字在下 */
+    }
+
+    .post-card-thumbnail {
+        width: 100%;
+    }
+
+    /* --- 新增：处理文章页和TOC在移动端的布局 --- */
+    
+    /* 撤销桌面端的Grid布局，让文章和TOC垂直堆叠 */
+    .single-page-wrapper.with-toc {
+        display: flex;
+        flex-direction: column; /* 让TOC在文章上面 */
+    }
+
+    /* 把目录放在文章内容的上方 */
+    .toc-container {
+        order: -1; /* Flexbox魔法：让TOC显示在最前面 */
+        position: static; /* 撤销粘性定位 */
+        max-height: none; /* 移除最大高度限制 */
+        width: 100%;
+        margin-bottom: 2rem;
+        background-color: var(--bg-secondary);
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+    }
+}

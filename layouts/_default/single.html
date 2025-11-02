@@ -1,0 +1,40 @@
+{{ define "main" }}
+
+<!-- 
+  创建一个包装器。
+  使用最简单、最稳健的方式来动态添加 class：
+  如果 .TableOfContents 存在，就在 class 属性里打印出 " with-toc"。
+  注意 " with-toc" 前面有一个空格。
+-->
+<div class="single-page-wrapper{{ if .TableOfContents }} with-toc{{ end }}">
+
+    <!-- 文章主体内容 -->
+    <article class="post-single">
+        <header class="post-header">
+            <h1 class="post-title">{{ .Title }}</h1>
+            <div class="post-meta">
+                <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006年1月2日" }}</time>
+                &middot; <span>阅读约 {{ .ReadingTime }} 分钟</span>
+            </div>
+        </header>
+        <div class="post-content">
+            {{ .Content }}
+        </div>
+    </article>
+
+    <!-- 
+      目录区 (TOC)
+      这段代码现在被安全地包裹在父级 div 中。
+    -->
+    {{ if .TableOfContents }}
+    <aside class="toc-container">
+        <div class="toc-content">
+            <h3 class="toc-title">目录</h3>
+            {{ .TableOfContents }}
+        </div>
+    </aside>
+    {{ end }}
+
+</div>
+
+{{ end }}
