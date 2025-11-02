@@ -1,7 +1,7 @@
 /* --- 目录滚动高亮脚本 (最终版) --- */
 document.addEventListener('DOMContentLoaded', () => {
 
-    console.log('TOC Script: DOM fully loaded. Starting script.');
+    //console.log('TOC Script: DOM fully loaded. Starting script.');
 
     // ▼▼▼ 核心改动：找到真正的滚动容器 ▼▼▼
     // CSS 选择器完全匹配你提供的那段代码
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     
-    console.log("TOC Script: Found the correct scroll container:", scrollContainer);
+    //console.log("TOC Script: Found the correct scroll container:", scrollContainer);
 
     const toc = document.getElementById('TableOfContents');
     if (!toc) return;
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (tocLinks.length === 0) return;
     const headings = tocLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
     
-    console.log(`TOC Script: Initial setup complete. Found ${tocLinks.length} links and ${headings.length} matching headings.`);
+    //console.log(`TOC Script: Initial setup complete. Found ${tocLinks.length} links and ${headings.length} matching headings.`);
 
     let activeLink = null;
     
