@@ -51,37 +51,69 @@ html.dark-mode .post-content img {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-
-/* --- 5e. 表格 <table> --- */
+/* --- 5e. 表格 <table> (方案：极简高密度 / Minimalist High-Density) --- */
 .post-content table {
     width: 100%;
-    border-collapse: collapse;
-    margin: 1.2em 0;
-    font-size: 0.9em;
-    overflow: hidden;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
+    margin: 1.8em 0; /* 增加外边距，给予充分的呼吸空间 */
+    font-size: 0.88em; /* 稍微缩小字体以提高密度 */
+    background-color: var(--bg-secondary); /* 遵从要求，使用纯白背景 */
+    
+    /* 关键：使用 separate 以便更好地控制圆角和内部边框 */
+    border-collapse: separate; 
+    border-spacing: 0;
+    
+    border-radius: 8px; /* 保持现代感的圆角 */
+    overflow: hidden; /* 确保内容在圆角内 */
+
+    /* 核心柔和化处理：一个更轻、更弥散的阴影 */
+    border: 1px solid var(--border-color); /* 用一个极细的边框来定义轮廓 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); /* 阴影非常浅，仅用于分离 */
+}
+
+/* 暗黑模式下，阴影需要更明显一点 */
+html.dark-mode .post-content table {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .post-content th, .post-content td {
-    padding: 10px 12px;
+    /* 核心密度调整：减小内边距 */
+    padding: 8px 12px; 
     text-align: left;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color); /* 保持行与行的分隔 */
+    line-height: 1.4; /* 略微减小行高，增加垂直密度 */
 }
 
-.post-content thead tr {
-    background-color: var(--bg-secondary);
+/* 表头样式：保持清晰，但不过分突出 */
+.post-content thead th {
+    background-color: transparent; /* 表头不需要独立背景色 */
     color: var(--text-primary);
     font-weight: 600;
+    /* 用更粗的下边框来区分表头和表体 */
+    border-bottom: 2px solid var(--border-color); 
 }
 
+/* 移除斑马纹，让内容区更干净 */
 .post-content tbody tr:nth-of-type(even) {
-    background-color: var(--bg-secondary);
+    background-color: transparent;
 }
 
-.post-content tbody tr:last-of-type {
+/* 关键交互：提供一个微妙的悬停效果 */
+.post-content tbody tr:hover {
+    background-color: rgba(128, 128, 128, 0.04);
+}
+html.dark-mode .post-content tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* 移除表格主体最后一行多余的下边框 */
+.post-content tbody tr:last-child th,
+.post-content tbody tr:last-child td {
     border-bottom: none;
 }
+
+
+
+
 
 
 /* --- 5f. 行内代码 <code> (新颜色方案) --- */

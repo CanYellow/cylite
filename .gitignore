@@ -1,82 +1,42 @@
 # ===================================================================
-#  Hugo - https://gohugo.io/
-# ===================================================================
-# 忽略由 Hugo 生成的最终站点目录
+# Hugo Specific
+#
+# Hugo 生成的最终站点目录，默认是 "public"。
+# 这是最重要的忽略项，绝不能提交到版本库。
 /public/
 
-# 忽略 Hugo 的资源缓存目录。这是 Hugo 处理图片、CSS/JS 等资源时生成的临时文件。
-# 它应该在每次构建时重新生成。
+# Hugo 生成的资源缓存目录。这些文件可以被重新生成。
 /resources/
 
-# 忽略 Hugo 在开发服务器模式下生成的文件
-hugo.server.lock
+# Hugo 生成的临时构建文件和统计信息。
+/hugo_stats.json
+hugo_build.lock
 
-# 忽略 Hugo 的构建统计信息文件
-hugo_stats.json
-
-# 忽略 Hugo 的日志文件
-hugo.log
-
-# fuck win10
-*Zone.Identifier
+# 有些人会把 Hugo 的可执行文件放在项目里，这不推荐。
+hugo.exe
+hugo
 
 # ===================================================================
-#  Hugo Theme Example Site
-# ===================================================================
-# 对于主题开发，我们通常会有一个 exampleSite 目录。
-# 同样需要忽略这个示例站点的生成文件和缓存。
-/exampleSite/public/
-/exampleSite/resources/
-
-# 忽略示例站点的本地配置文件。
-# 这样每个开发者可以有自己的本地测试配置，而不会影响仓库中的默认配置。
-# 建议将 `hugo.toml` 或 `config.toml` 提交，但忽略本地的覆盖文件。
-/exampleSite/hugo.local.toml
-/exampleSite/config.local.toml
-/exampleSite/config.local.yaml
-/exampleSite/config.local.json
-
-
-# ===================================================================
-#  Node.js / npm / yarn / pnpm
-# ===================================================================
-# 现代前端工作流（如使用 Tailwind CSS, PostCSS, SASS, ESBuild）通常依赖 Node.js。
-
-# 忽略所有依赖包。这些应该通过 `npm install` 或 `yarn install` 重新安装。
+# Node.js / npm / yarn (如果你的主题或项目使用前端工具)
+#
+# 包含所有依赖项，体积巨大，必须忽略。
 /node_modules/
 
-# 忽略包管理器的日志文件
+# 包管理器的调试日志文件。
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# 忽略 .pnp.js (Yarn Plug'n'Play)
-.pnp.*
-
-
 # ===================================================================
-#  Build artifacts
-# ===================================================================
-# 忽略通用构建输出目录
-/dist/
-/build/
-/.tmp/
-
+# Sass / SCSS Cache
+#
+.sass-cache/
+.dart_sass_cache/
 
 # ===================================================================
-#  Environment Variables
-# ===================================================================
-# 忽略本地环境变量文件。这些文件可能包含敏感信息（API 密钥等）。
-# 最佳实践是提交一个 `.env.example` 文件作为模板。
-.env
-.env.*
-!.env.example
-
-
-# ===================================================================
-#  Operating System Files
-# ===================================================================
+# OS Generated Files (操作系统生成的文件)
+#
 
 # macOS
 .DS_Store
@@ -85,51 +45,61 @@ pnpm-debug.log*
 ._*
 .Spotlight-V100
 .Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
 
 # Windows
-Thumbs.db
-ehthumbs.db
+# 从网上下载的文件附加的区域标识符
+*Zone.Identifier
+
 desktop.ini
 
-
 # ===================================================================
-#  IDE and Editor Configuration
-# ===================================================================
+# Editor & IDE Specific (编辑器和IDE的配置文件)
+#
 
-# Visual Studio Code
+# VS Code
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
 !.vscode/launch.json
+!.vscode/tasks.json
 
-# JetBrains (WebStorm, GoLand, etc.)
+# JetBrains IDEs (IntelliJ, WebStorm, etc.)
 .idea/
 
 # Sublime Text
 *.sublime-project
 *.sublime-workspace
 
-# Vim
-*.swp
-*.swo
-*~
-
 # Atom
 .atom/
 
+# Vim
+*~
+*.swp
+*.swo
 
 # ===================================================================
-#  Miscellaneous
-# ===================================================================
+# General / Miscellaneous (通用/杂项)
+#
 
-# 忽略通用日志文件
+# 日志文件
 *.log
+logs/
 
-# 忽略压缩文件，除非它们是项目故意包含的资源
+# 环境变量文件，通常包含敏感信息，绝不能提交！
+.env
+.env.*
+!.env.example
+
+# 临时文件
+*.tmp
+*.temp
+
+# 压缩包文件 (通常不应将构建产物或数据备份提交)
 *.zip
-*.rar
+*.tar
 *.gz
-*.7z
-
-# 忽略由 `hugo new` 命令生成的 archetypes 中的空文件
-/archetypes/default.md.bak
+*.rar

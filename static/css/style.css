@@ -68,7 +68,7 @@ body {
 .main-content {
     grid-area: main;
     overflow-y: auto;
-    padding: calc(var(--spacing-unit) * 2.5);
+    padding: calc(var(--spacing-unit) * 1.5);
 }
 
 .site-footer {
@@ -84,6 +84,7 @@ body {
     flex-direction: column;
     padding: 1.5rem;
 }
+
 .sidebar-header { text-align: left; margin-bottom: 1rem; }
 .sidebar-brand { text-decoration: none; color: inherit; display: inline-block; }
 .sidebar-logo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem; }
@@ -317,20 +318,124 @@ body {
 .site-footer a { color: var(--accent-primary); text-decoration: none; }
 .site-footer a:hover { text-decoration: underline; }
 
-/* 4e. 文章页 & 目录布局 */
-.single-page-wrapper.with-toc { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 2rem; height: 100%; overflow: hidden; }
-.single-page-wrapper.with-toc .post-single::-webkit-scrollbar { display: none; }
-.single-page-wrapper.with-toc .post-single {overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; padding-right: 1rem;}
-.single-page-wrapper.with-toc .post-single::-webkit-scrollbar {display: none;}
-.toc-container { display: flex; flex-direction: column; height: 100%; background-color: var(--bg-secondary); border-radius: 8px; overflow: hidden; }
-.toc-content { display: flex; flex-direction: column; height: 100%; background-color: var(--bg-secondary); border-radius: 8px; overflow: hidden; }
-.toc-title { padding: 1rem 1rem 0.5rem 1rem; margin: 0; font-weight: bold; flex-shrink: 0; }
-.toc-content #TableOfContents { flex-grow: 1; overflow-y: auto; min-height: 0; scrollbar-width: none; -ms-overflow-style: none; }
-.toc-content #TableOfContents::-webkit-scrollbar { display: none; }
-.toc-content #TableOfContents ul { list-style: none; padding: 0 1rem 0rem 1rem; margin: 0; }
-.toc-content li a { display: block; padding: 4px 0; line-height: 1.4; text-decoration: none; color: var(--text-secondary); transition: color 0.2s; }
-.toc-content li a:hover { color: var(--accent-primary); }
-.toc-content ul ul { padding-left: 1rem; }
+
+/* with-toc 容器本身，让它 100% 填满它的父容器 (也就是上面的 main) */
+.single-page-wrapper.with-toc {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px; /* 左边内容，右边280px目录 */
+  gap: 2rem;
+  height: 100%;
+  overflow-y: auto; /* ✨ 关键修改：允许父容器自己垂直滚动 */
+
+  /* ↓ 把隐藏滚动条的样式从 .post-single 移到这里来 ↓ */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.single-page-wrapper.with-toc::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* 3. 让目录“粘”在屏幕上 */
+.single-page-wrapper.with-toc .toc-container {
+  width: 280px; /* 保持你原来的宽度 */
+  position: sticky;
+  top: 0rem; /* 粘在距离视口顶部 2rem 的位置，可以根据你的 header 高度调整 */
+  /* 如果目录本身内容很长，让它自己滚动 */
+  max-height: calc(100vh - 10rem); /* 限制最大高度，避免超出屏幕 */
+  /* --- 新增/修改 --- */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* 防止内容溢出容器，而不是让容器滚动 */
+  /* ...其他样式... */
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+}
+
+/* 4. （可选）如果你还想隐藏目录的滚动条 */
+.single-page-wrapper.with-toc .toc-container::-webkit-scrollbar {
+    display: none;
+}
+.single-page-wrapper.with-toc .toc-container {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* ✨ 新增或修改 */
+.toc-content {
+  width: 100%; /* 撑满父容器 */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* 很重要，配合子元素的滚动 */
+}
+
+
+.toc-title {
+  padding: 1rem 1rem 0.5rem 1rem;
+  margin: 0;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+
+
+.toc-content #TableOfContents {
+
+  padding: 0 1rem 1rem 1rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+    /* ✨ 新增或修改 */
+
+      /* ...你已有的样式... */
+      flex-grow: 1; /* ✨ 关键：占据所有剩余的垂直空间 */
+      overflow-y: auto; /* ✨ 关键：让它自己滚动 */
+      min-height: 0; /* ✨ Flexbox 滚动区域的必备技巧 */
+}
+.toc-content #TableOfContents::-webkit-scrollbar {
+    display: none;
+}
+
+/* --- 请用下面的代码块替换你现有的 li a 规则 --- */
+
+.toc-content #TableOfContents li a {
+    display: block;
+    /* 修改：增加左右 padding，为左侧高亮条留出空间 */
+    padding: 6px 12px; 
+    line-height: 1.4;
+    text-decoration: none;
+    color: var(--text-secondary);
+    /* 修改：过渡效果更平滑，并为边框颜色添加过渡 */
+    transition: color 0.2s ease-in-out, border-left-color 0.2s ease-in-out;
+    /* 新增：默认状态下，左边框是透明的，占位用 */
+    border-left: 2px solid transparent; 
+}
+
+.toc-content #TableOfContents li a:hover {
+    color: var(--accent-primary);
+}
+
+
+/* --- 请将下面的新规则添加到上面代码的后面 --- */
+
+/* 新增：激活链接（当前阅读位置）的高亮样式 */
+.toc-content #TableOfContents li a.active-toc-link {
+    color: var(--accent-primary);
+    font-weight: 600; /* 字体加粗以示强调 */
+    border-left-color: var(--accent-primary); /* 左侧高亮条显示出来 */
+}
+
+
+/* ... 你的其他 ul, li, a 样式 ... */
+
+.toc-content #TableOfContents ul { 
+  list-style: none; 
+  padding: 0; 
+  margin: 0; 
+}
+
+
+.toc-content #TableOfContents ul ul { padding-left: 1rem; }
+.toc-content #TableOfContents ul ul ul { padding-left: 1rem; }
 
 /* 4f. 主题切换器 UI */
 #theme-toggle-dark { display: inline-block; }
