@@ -36,8 +36,8 @@
     <link rel="icon" type="image/png" href="/logo512x512.png" sizes="512x512" />
 
     <!-- 2. 标准 Meta 标签 -->
-    <meta name="description" content="{{ $description }}">
-    <meta name="author" content="{{ $site.Params.author | default "Author" }}">
+    <meta name="description" content="{{ .Params.description }}">
+    <meta name="author" content="{{ .Site.Params.author.name | default "Author" }}">
 
 
     <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
