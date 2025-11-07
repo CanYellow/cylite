@@ -740,15 +740,7 @@ html {
     flex-direction: column;
   }
   .toc-container {
-    order: -1;
-    position: static;
-    max-height: none;
-    width: 100%;
-    margin-bottom: 2rem;
-    background-color: var(--bg-secondary);
-    padding: 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
+    display: none;
   }
 }
 
@@ -760,9 +752,6 @@ html {
   }
   .single-page-wrapper.with-toc .post-single {
     overflow-y: visible;
-  }
-  .toc-container {
-    margin-bottom: 2rem;
   }
 }
 
