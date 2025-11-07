@@ -739,7 +739,7 @@ html {
     display: flex;
     flex-direction: column;
   }
-  .toc-container {
+	.single-page-wrapper.with-toc .toc-container {
     display: none;
   }
 }
