@@ -6,8 +6,8 @@ license = "MIT"
 licenselink = "https://github.com/CanYelllow/cylite/blob/master/LICENSE"
 description = ""
 homepage = "http://example.com/"
-tags = [Blog]
-features = [lightweight]
+tags = ["Blog"]
+features = ["lightweight"]
 min_version = "0.41.0"
 
 [author]

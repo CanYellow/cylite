@@ -49,6 +49,10 @@
     <!-- 3. 新增：引入 Markdown 内容样式 -->
     <link rel="stylesheet" href="{{ "css/markdown.css" | relURL }}">
 
+    <!-- 3.1 新增：百度SEO验证 -->
+    {{- with .Site.Params.baidu_site_verification -}}
+      <meta name="baidu-site-verification" content="{{ . }}" />
+    {{- end -}}
 
     <!-- 3. Canonical URL: 告诉搜索引擎这是内容的“官方”版本 -->
     <link rel="canonical" href="{{ $page.Permalink }}">
