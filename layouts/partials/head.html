@@ -54,6 +54,11 @@
       <meta name="baidu-site-verification" content="{{ . }}" />
     {{- end -}}
 
+    <!-- 3.2 新增：googleSEO验证 -->
+    {{- with .Site.Params.google_site_verification -}}
+      <meta name="google-site-verification" content="{{ . }}" />
+    {{- end -}}
+
     <!-- 3. Canonical URL: 告诉搜索引擎这是内容的“官方”版本 -->
     <link rel="canonical" href="{{ $page.Permalink }}">
 
