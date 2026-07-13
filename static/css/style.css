@@ -38,6 +38,9 @@ html.dark-mode {
 
 html {
   scroll-behavior: smooth;
+  /* 新增：全局基础字体大小。浏览器默认是 16px */
+  /* 觉得大可以改为 15px 甚至 14px */
+  font-size: 14px; 
 }
 
 body {
