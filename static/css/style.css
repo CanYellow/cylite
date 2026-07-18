@@ -1066,6 +1066,42 @@ html.dark-mode .chat-dialog.role-ai .chat-name {
 }
 
 
+/* 3. 系统方 (System) - 展现为“底层代码/机制”的克制感 */
+.chat-dialog.role-system {
+    /* 使用次级背景，这会随着明暗模式自动变成浅灰或深灰 */
+    background-color: var(--bg-secondary); 
+    
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    
+    /* 覆盖掉基础容器的无脑阴影，使之显得更平坦 */
+    box-shadow: none; 
+}
+
+.chat-dialog.role-system .chat-avatar {
+    /* 头像框使用底层背景色，形成内凹感 */
+    background-color: var(--bg-primary);
+    color: var(--text-secondary);
+}
+
+.chat-dialog.role-system .chat-name {
+    color: var(--text-secondary);
+    /* 强制使用等宽字体（代码字体），并全部大写，极大地增强“系统控制台”的既视感 */
+    font-family: "Consolas", "Menlo", "Courier New", monospace;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.chat-dialog.role-system .chat-content {
+    color: var(--text-secondary); /* 使用次要文字颜色，确保明暗模式下都清晰可见但不过于刺眼 */
+    font-size: 0.9rem;
+}
+
+.chat-dialog.role-system .chat-content em {
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
 
 /* ==========================================================================
    9. 文章声明区块 (版权与人机边界声明) - 专业化卡片设计
