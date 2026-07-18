@@ -12,7 +12,7 @@
 
 {{ if eq $role "system" }}
 <!-- 当角色是 system 时，渲染专属的隐藏占位框 -->
-<div class="chat-dialog role-system">
+<div id="chat-turn-{{ .Ordinal }}" class="chat-dialog role-system">
     <div class="chat-header">
         <span class="chat-avatar">
             <!-- 换成一个更具科技感的齿轮 SVG，比 Emoji 更契合整体排版 -->
@@ -28,7 +28,7 @@
     </div>
 </div>
 {{ else }}
-  <div class="chat-dialog role-{{ $role }}">
+  <div id="chat-turn-{{ .Ordinal }}" class="chat-dialog role-{{ $role }}">
       <div class="chat-header">
           <span class="chat-avatar">
               {{ if eq $role "user" }}

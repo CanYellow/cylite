@@ -6,7 +6,15 @@
   如果 .TableOfContents 存在，就在 class 属性里打印出 " with-toc"。
   注意 " with-toc" 前面有一个空格。
 -->
+<!-- 
 <div class="single-page-wrapper{{ if .TableOfContents }} with-toc{{ end }}">
+-->
+<!-- 
+  这是为了兼容dialog shortcode 的目录生成所做的改动
+-->
+{{ $hasDialog := .HasShortcode "dialog" }}
+<div class="single-page-wrapper{{ if or .TableOfContents $hasDialog }} with-toc{{ end }}">
+
 
     <!-- 文章主体内容 -->
     <article class="post-single">
@@ -111,6 +119,7 @@
       目录区 (TOC)
       这段代码现在被安全地包裹在父级 div 中。
     -->
+    <!-- 
     {{ if .TableOfContents }}
     <aside class="toc-container">
         <div class="toc-content">
@@ -119,7 +128,85 @@
         </div>
     </aside>
     {{ end }}
+    -->
+    <!-- 
+      目录区 (TOC)
+      这段代码现在被安全地包裹在父级 div 中。
+      这是为了兼容dialog shortcode 的目录生成所做的改动
+    -->
+    {{ if or .TableOfContents $hasDialog }}
+    <aside class="toc-container">
+        <div class="toc-content" id="toc-content-wrapper">
+            <h3 class="toc-title">目录</h3>
+            {{ .TableOfContents }}
+        </div>
+    </aside>
+    {{ end }}
+
 
 </div>
+
+<!-- ======================================================= -->
+<!-- == 动态融合对话流与原生 Markdown 的 TOC 脚本 (Hugo 安全版) == -->
+<!-- ======================================================= -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var postContent = document.querySelector('.post-content');
+    var tocWrapper = document.getElementById('toc-content-wrapper');
+    
+    if (!postContent || !tocWrapper) return;
+
+    var dialogs = postContent.querySelectorAll('.chat-dialog');
+    if (dialogs.length === 0) return;
+
+    var elements = postContent.querySelectorAll('h2, h3, h4, h5, h6, .chat-dialog');
+    if (elements.length === 0) return;
+
+    var newTocHTML = '<nav id="TableOfContents"><ul>';
+    
+    for (var i = 0; i < elements.length; i++) {
+        var el = elements[i];
+        
+        if (el.tagName.match(/^H[2-6]$/i)) {
+            if (!el.id) el.id = el.textContent.trim().replace(/\s+/g, '-').toLowerCase();
+            
+            var level = parseInt(el.tagName.substring(1)) - 2;
+            var indent = level > 0 ? level * 1.2 : 0;
+            
+            newTocHTML += '<li style="margin-left: ' + indent + 'rem; margin-top: 0.3rem;">' +
+                              '<a href="#' + el.id + '" style="font-weight: 500;">' + el.textContent + '</a>' +
+                          '</li>';
+        } 
+        else if (el.className.indexOf('chat-dialog') !== -1) {
+            var nameNode = el.querySelector('.chat-name');
+            var nameText = nameNode ? nameNode.textContent : '对话';
+            
+            var roleIcon = '';
+            var roleColor = '';
+            
+            if (el.className.indexOf('role-user') !== -1) {
+                roleIcon = '👤';
+                roleColor = 'var(--toc-user-color, #4a90e2)';
+            } else if (el.className.indexOf('role-ai') !== -1) {
+                roleIcon = '🤖';
+                roleColor = 'var(--toc-ai-color, #10a37f)';
+            } else if (el.className.indexOf('role-system') !== -1) {
+                roleIcon = '⚙️';
+                roleColor = 'var(--toc-sys-color, #888)';
+            }
+
+            newTocHTML += '<li class="toc-dialog-item" style="margin-left: 1.2rem; margin-top: 0.3rem;">' +
+                              '<a href="#' + el.id + '" style="color: ' + roleColor + '; font-size: 0.95em;">' +
+                                  '<span style="font-size: 0.9em; margin-right: 4px;">' + roleIcon + '</span>' + nameText +
+                              '</a>' +
+                          '</li>';
+        }
+    }
+
+    newTocHTML += '</ul></nav>';
+    tocWrapper.innerHTML = '<h3 class="toc-title">目录</h3>' + newTocHTML;
+});
+</script>
+<!-- ======================================================= -->
 
 {{ end }}
