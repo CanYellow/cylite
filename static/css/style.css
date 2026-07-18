@@ -1066,35 +1066,53 @@ html.dark-mode .chat-dialog.role-ai .chat-name {
 }
 
 
-/* 3. 系统方 (System) - 展现为“底层代码/机制”的克制感 */
+/* ==========================================================================
+   3. 系统方 (System) - 展现为“底层代码/机制”的克制感
+   ========================================================================== */
 .chat-dialog.role-system {
-    /* 使用次级背景，这会随着明暗模式自动变成浅灰或深灰 */
+    /* 容器外观与 post-statement 保持严格一致 */
     background-color: var(--bg-secondary); 
-    
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    
-    /* 覆盖掉基础容器的无脑阴影，使之显得更平坦 */
-    box-shadow: none; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); 
+    position: relative;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .chat-dialog.role-system .chat-avatar {
     /* 头像框使用底层背景色，形成内凹感 */
-    background-color: var(--bg-primary);
+    //background-color: var(--bg-primary);
     color: var(--text-secondary);
 }
 
+/* 【已拉齐】System 标题：与声明栏 <h4> 样式完全一致 */
 .chat-dialog.role-system .chat-name {
-    color: var(--text-secondary);
-    /* 强制使用等宽字体（代码字体），并全部大写，极大地增强“系统控制台”的既视感 */
-    font-family: "Consolas", "Menlo", "Courier New", monospace;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
+    color: var(--text-primary);     /* 提亮为系统主色，不再是次级灰色 */
+    font-size: 1.05rem;             /* 统一字号 */
+    font-weight: 600;               /* 统一字重 */
+    letter-spacing: 0.5px;          /* 统一字间距 */
+    font-family: inherit;           /* 去除代码字体，跟随全站字体 */
 }
 
+/* 【已拉齐】System 内容：与声明栏 <li> 样式完全一致 */
 .chat-dialog.role-system .chat-content {
-    color: var(--text-secondary); /* 使用次要文字颜色，确保明暗模式下都清晰可见但不过于刺眼 */
-    font-size: 0.9rem;
+    color: var(--text-secondary); 
+    font-size: 0.9rem;              /* 统一字号 */
+    line-height: 1.7;               /* 统一行高，增加呼吸感 */
+}
+
+/* System 段落间距与声明列表间距对齐 */
+.chat-dialog.role-system .chat-content p {
+    margin-bottom: 0.7rem;          
+}
+.chat-dialog.role-system .chat-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* System 内容加粗，与声明栏 strong 样式一致 */
+.chat-dialog.role-system .chat-content strong {
+    color: var(--text-primary);
+    font-weight: 600;
 }
 
 .chat-dialog.role-system .chat-content em {
@@ -1106,21 +1124,20 @@ html.dark-mode .chat-dialog.role-ai .chat-name {
 /* ==========================================================================
    9. 文章声明区块 (版权与人机边界声明) - 专业化卡片设计
    ========================================================================== */
-
-/* 
- * 放弃左侧 border-left，以区分对话框样式。
- * 采用全包围边框 + 顶部强调线的设计，营造“官方声明”的严谨感。
- */
 .post-statement {
-    margin: 3.5rem 0 2rem 0; /* 距离上方正文留出足够的呼吸空间 */
+    margin: 3.5rem 0 2rem 0; 
     padding: 1.5rem;
-    background-color: var(--bg-secondary); /* 使用次级背景色，在亮色下通常为纯白/浅灰，暗色下为深灰 */
+    
+    /* 容器外观与 role-system 保持严格一致 */
+    background-color: var(--bg-secondary); 
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    border-top: 3px solid var(--accent-primary); /* 顶部点缀主题色，视觉重心上移 */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); /* 非常克制的弱阴影 */
-    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); 
     transition: background-color 0.3s, border-color 0.3s;
+    
+    /* 顶部主题色 Banner (声明独有) */
+    border-top: 3px solid var(--accent-primary); 
+    position: relative;
 }
 
 .statement-header {
@@ -1134,39 +1151,42 @@ html.dark-mode .chat-dialog.role-ai .chat-name {
 .statement-header svg {
     width: 20px;
     height: 20px;
-    stroke: var(--accent-primary); /* 图标使用主题色 */
+    stroke: var(--accent-primary); 
 }
 
+/* 【已拉齐】声明标题：与 System 的 .chat-name 样式完全一致 */
 .statement-header h4 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 600;
     letter-spacing: 0.5px;
+    color: var(--text-primary);
 }
 
 .statement-content ul {
     margin: 0;
     padding-left: 1.2rem;
-    list-style-type: disc; /* 使用原点列表，显得更有条理 */
+    list-style-type: disc; 
 }
 
+/* 【已拉齐】声明内容：与 System 的 .chat-content 样式完全一致 */
 .statement-content li {
-    font-size: 0.9em;
-    color: var(--text-secondary); /* 正文使用次级文字颜色，降低视觉疲劳 */
+    font-size: 0.9rem;
+    color: var(--text-secondary); 
     line-height: 1.7;
     margin-bottom: 0.7rem;
 }
 
 .statement-content li:last-child {
-    margin-bottom: 0; /* 去除最后一项的底边距 */
+    margin-bottom: 0; 
 }
 
+/* 【已拉齐】声明内容加粗：与 System strong 样式完全一致 */
 .statement-content strong {
-    color: var(--text-primary); /* 强调部分使用主文字颜色跳脱出来 */
+    color: var(--text-primary); 
     font-weight: 600;
 }
 
-/* 声明内的链接样式，保持与全局正文链接一致的优雅下划线过渡 */
 .statement-content a {
     color: var(--accent-primary);
     text-decoration: none;
