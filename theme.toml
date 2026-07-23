@@ -1,125 +1,20 @@
-# =====================================================================
-# Cylite 主题全局配置文件 (hugo.toml)
-# =====================================================================
+name = "cylite"
+license = "MIT"
+licenselink = "https://github.com/CanYellow/cylite/blob/main/LICENSE"
+description = "a light-weight blogger theme"
 
-baseURL = "https://example.com/"      # 你的网站域名 (部署时修改)
-languageCode = "zh-cn"                # 语言代码，用于 html lang 属性
-title = "My Blog"                     # 网站主标题 (显示在侧边栏、浏览器标签页等)
-theme = "cylite"                      # 主题名称 (需与 themes 文件夹中的名称一致)
+# The home page of the theme, where the source can be found.
+homepage = "https://github.com/CanYellow/cylite/"
 
-# 分页设置
-paginate = 10                         # 列表页、首页每页显示的文章数量
+# If you have a running demo of the theme.
+demosite = "https://cysblog.space/"
 
-# 针对中文环境的优化
-hasCJKLanguage = true                 # 开启中文/日文/韩文字数统计和摘要截断支持
-summaryLength = 100                   # 自动摘要的长度
+tags = ["blog", "personal"]
+features = ["light-weight", "awesome", "acdemic", "modern"]
 
-# =====================================================================
-# 核心构建与分类法配置
-# =====================================================================
-[taxonomies]
-  category = "categories"
-  tag = "tags"
 
-# =====================================================================
-# 作者信息
-# =====================================================================
+
+# If the theme has a single author
 [author]
-  name = "Canyellow"                 # 默认作者名称
-
-# =====================================================================
-# 主导航菜单配置 (侧边栏 Sidebar Nav)
-# weight 越小越靠前
-# =====================================================================
-[menu]
-  [[menu.main]]
-    identifier = "home"
-    name = "首页"
-    url = "/"
-    weight = 10
-
-  [[menu.main]]
-    identifier = "posts"
-    name = "文章"
-    url = "/posts/"
-    weight = 20
-
-  [[menu.main]]
-    identifier = "categories"
-    name = "分类"
-    url = "/categories/"
-    weight = 30
-
-  [[menu.main]]
-    identifier = "tags"
-    name = "标签"
-    url = "/tags/"
-    weight = 40
-
-# =====================================================================
-# 主题自定义参数 (Params) - 对应模板中的 .Site.Params.xxx
-# =====================================================================
-[params]
-  # --- 网站基础信息 ---
-  description = "这里是网站的简短描述，它将显示在侧边栏的 Logo 下方，并作为默认的 SEO Meta Description。"
-  logo = "/logo256x256.png"          # 侧边栏 Logo 图片路径 (需放在 static 目录下)
-  
-  # 用于首页 (index.html) 渲染常规页面的分类文件夹名
-  mainSections = ["posts"]           
-
-  # --- 作者信息 (SEO结构化数据使用) ---
-  [params.author]
-    name = "Canyellow"
-
-  # --- SEO 与网站验证 (在 head.html 中使用) ---
-  baidu_site_verification = "your_baidu_verify_code"     # 百度站长平台验证码 (留空则不生成meta标签)
-  google_site_verification = "your_google_verify_code"   # Google Search Console 验证码 (留空则不生成)
-
-  # --- 网站底部备案信息 (在 footer.html 中使用) ---
-  [params.beian]
-    enable = true                                      # 是否开启底部备案信息显示
-    icp = "京ICP备XXXXXXXX号-1"                          # 工信部 ICP 备案号
-    gongan_record_code = "11010502030000"                # 公安备案号纯数字（用于链接跳转拼接）
-    gongan_text = "京公网安备 11010502030000号"          # 公安备案显示的文字
-
-# =====================================================================
-# 侧边栏社交图标链接 (.Site.Params.social)
-# 支持的 icon_name: github, mail, twitter (详情见 icon.html)
-# =====================================================================
-[[params.social]]
-  name = "GitHub"
-  icon_name = "github"
-  url = "https://github.com/CanYellow"
-
-[[params.social]]
-  name = "Email"
-  icon_name = "mail"
-  url = "mailto:your-email@example.com"
-
-[[params.social]]
-  name = "Twitter"
-  icon_name = "twitter"
-  url = "https://twitter.com/your_twitter_id"
-
-
-# =====================================================================
-# Markdown 渲染与代码高亮配置
-# =====================================================================
-[markup]
-  # --- HTML 渲染控制 ---
-  [markup.goldmark.renderer]
-    unsafe = true      # ⚠ 必须设为 true！因为你的 shortcodes (如 dialog, pdf) 中包含了自定义 HTML 标签。
-
-  # --- 代码高亮配置 (Chroma) ---
-  [markup.highlight]
-    codeFences = true
-    guessSyntax = true
-    lineNos = false    # 是否全局默认显示行号 (可以在具体 markdown 代码块中用 {linenos=true} 单独开启)
-    noClasses = false  # ⚠ 必须设为 false！这样 Hugo 才会生成 class（如 .chroma .k），从而适配你自定义的亮/暗色 CSS 高亮样式。
-    style = "github"   # 这里的 style 会被 noClasses=false 屏蔽，实际生效的是你的 css/syntax.css
-
-  # --- 目录 (Table of Contents) 配置 ---
-  [markup.tableOfContents]
-    endLevel = 3       # 目录最大提取到 h3
-    ordered = false    # 是否生成有序列表
-    startLevel = 2     # 目录从 h2 开始提取 (忽略 h1，因为 h1 通常是文章主标题)
+    name = "CanYellow"
+    homepage = "https://cysblog.space/about"
